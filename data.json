@@ -1,0 +1,16 @@
+[
+  {
+    "campaign_name": "Test Campaign",
+    "campaign_goal": 10000,
+    "campaign_starts": "2024-06-01",
+    "campaign_ends": "2024-06-30",
+    "campaign_type": "CPM"
+  },
+  {
+    "campaign_name": "Test Campaign 2",
+    "campaign_goal": 20000,
+    "campaign_starts": "2024-07-01",
+    "campaign_ends": "2024-07-30",
+    "campaign_type": "CPII"
+  }
+]
