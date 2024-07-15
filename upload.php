@@ -54,16 +54,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = $response['message'];
                 $inserted_ids = json_encode($response['inserted_ids']);
 
-                $responseStmt = $conn->prepare("INSERT INTO responses (status, message, inserted_ids) VALUES (?, ?, ?)");
-                $responseStmt->bind_param("sss", $status, $message, $inserted_ids);
+                $responsestore = $conn->prepare("INSERT INTO responses (status, message, inserted_ids) VALUES (?, ?, ?)");
+                $responsestore->bind_param("sss", $status, $message, $inserted_ids);
 
-                $responseStmt->execute();
+                $responsestore->execute();
 
-                $campaignTypeStmt = $conn->prepare("INSERT INTO campaign_types (type_name) VALUES (?) ON DUPLICATE KEY UPDATE Id=LAST_INSERT_ID(Id)");
-                $campaignTypeStmt->bind_param("s", $campaignTypeName);
+                $campaignTypestore = $conn->prepare("INSERT INTO campaign_types (type_name) VALUES (?) ON DUPLICATE KEY UPDATE Id=LAST_INSERT_ID(Id)");
+                $campaignTypestore->bind_param("s", $campaignTypeName);
 
-                $campaignStmt = $conn->prepare("INSERT INTO campaigns (code, name, goal, starts, ends, campaign_type_id) VALUES (?, ?, ?, ?, ?, ?)");
-                $campaignStmt->bind_param("ssissi", $code, $name, $goal, $starts, $ends, $campaignTypeId);
+                $campaignStore = $conn->prepare("INSERT INTO campaigns (code, name, goal, starts, ends, campaign_type_id) VALUES (?, ?, ?, ?, ?, ?)");
+                $campaignStore->bind_param("ssissi", $code, $name, $goal, $starts, $ends, $campaignTypeId);
                 // Insert response data into MySQL
                 foreach ($campaigns as $campaign) {
                     $code = uniqid(); // Generate a unique code for the campaign
@@ -82,12 +82,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $campaignTypeId = $typeRow['id'];
 
                         // Insert the campaign
-                        $campaignStmt->execute();
+                        $campaignStore->execute();
                     }else{
                         
-                        $campaignTypeStmt->execute();
+                        $campaignTypestore->execute();
                         $campaignTypeId = $conn->insert_id;
-                        $campaignStmt->execute();
+                        $campaignStore->execute();
                     }
                 }
 
